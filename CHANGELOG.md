@@ -56,6 +56,11 @@
 - Fixed pybind bindings by adding the missing `IFrameGrabber` base-class binding, enabling `FrameGrabber` to import correctly in Python.
 - Updated export worker to avoid selecting `FFmpegRenderer` under pytest so tests don’t depend on FFmpeg availability.
 
+## Phase 13 — Downloadable Uploads (2026-04-02)
+### Static Asset Serving
+- Mounted `GET /uploads/*` for the repository-level `uploads/` directory.
+- `AssetResponse` now includes `download_url` (e.g. `/uploads/<project_id>/<asset_id>_<filename>`) so clients don’t have to use local filesystem paths.
+
 ## Phase 6 — C++ Engine Integration (Pybind11 Bridge)
 - Configured **Pybind11** via `CMake` to compile the C++ `engine` and `bindings` modules into a native Python extension
 - Implemented `app/core/bridge.py` featuring the `TimelineBuilder` utility to map Pydantic `TimelineIR` models directly to C++ memory structures

@@ -23,6 +23,7 @@ class AssetResponse(BaseModel):
     filename: str
     content_type: str
     file_path: str
+    download_url: str
     file_size_bytes: int
     duration_seconds: float
     project_id: UUID | None
@@ -36,6 +37,16 @@ _IN_MEMORY_ASSETS: dict[str, AssetResponse] = {}
 
 def _uploads_dir() -> Path:
     return Path("uploads")
+
+def _download_url_for_path(dest_path: Path) -> str:
+    # Convert on-disk `uploads/<project_id>/<asset_id>_<name>` to `/uploads/...`
+    try:
+        rel = dest_path.as_posix()
+        if rel.startswith("uploads/"):
+            rel = rel[len("uploads/") :]
+        return f"/uploads/{rel}"
+    except Exception:
+        return ""
 
 
 @router.post("/upload", response_model=AssetResponse)
@@ -76,6 +87,8 @@ async def upload_asset(
         project_id=project_id,
     )
 
+    download_url = _download_url_for_path(dest_path)
+
     # Tests shouldn't require a running Postgres instance.
     if _USE_IN_MEMORY_ASSETS:
         resp = AssetResponse(
@@ -83,6 +96,7 @@ async def upload_asset(
             filename=asset.filename,
             content_type=asset.content_type,
             file_path=asset.file_path,
+            download_url=download_url,
             file_size_bytes=asset.file_size_bytes,
             duration_seconds=asset.duration_seconds,
             project_id=asset.project_id,
@@ -104,6 +118,7 @@ async def upload_asset(
         filename=asset.filename,
         content_type=asset.content_type,
         file_path=asset.file_path,
+        download_url=download_url,
         file_size_bytes=asset.file_size_bytes,
         duration_seconds=asset.duration_seconds,
         project_id=asset.project_id,
@@ -126,6 +141,7 @@ async def list_assets(project_id: UUID, session: DbSession):
             filename=a.filename,
             content_type=a.content_type,
             file_path=a.file_path,
+            download_url=_download_url_for_path(Path(a.file_path)),
             file_size_bytes=a.file_size_bytes,
             duration_seconds=a.duration_seconds,
             project_id=a.project_id,

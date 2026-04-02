@@ -78,6 +78,12 @@ def create_app() -> FastAPI:
     exports_dir.mkdir(parents=True, exist_ok=True)
     app.mount("/exports", StaticFiles(directory=str(exports_dir)), name="exports")
 
+    # ── Static files (uploads) ────────────────────────────
+    # Assets API stores files under `<repo_root>/uploads/<project_id>/...`.
+    uploads_dir = Path(__file__).resolve().parent.parent / "uploads"
+    uploads_dir.mkdir(parents=True, exist_ok=True)
+    app.mount("/uploads", StaticFiles(directory=str(uploads_dir)), name="uploads")
+
     app.include_router(health_router)
     app.include_router(projects_router)
     app.include_router(timeline_router)
