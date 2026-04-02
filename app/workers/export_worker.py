@@ -50,6 +50,7 @@ def _emit_progress_sync(
                 manager.broadcast(project_id, {
                     "type": "job_progress",
                     "job_id": job_id,
+                    "project_id": project_id,
                     "status": status.value,
                     "progress": progress,
                     "stage": stage,
@@ -66,6 +67,7 @@ def _emit_progress_sync(
                 manager.broadcast(project_id, {
                     "type": "job_progress",
                     "job_id": job_id,
+                    "project_id": project_id,
                     "status": status.value,
                     "progress": progress,
                     "stage": stage,
@@ -91,6 +93,7 @@ def _emit_progress_sync(
         payload = {
             "type": "job_progress",
             "job_id": job_id,
+            "project_id": project_id,
             "status": status.value,
             "progress": progress,
             "stage": stage,

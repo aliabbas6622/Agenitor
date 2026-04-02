@@ -28,6 +28,7 @@ class JobRequest(BaseModel):
 class JobProgressEvent(BaseModel):
     """Event emitted via WebSocket during job execution."""
     job_id: str
+    project_id: str
     status: JobStatus
     progress: float  # 0.0 to 1.0
     stage: str

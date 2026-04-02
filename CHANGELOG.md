@@ -65,6 +65,10 @@
 ### Single-Asset Fetch
 - Added `GET /api/v1/assets/{asset_id}` to fetch asset metadata and `download_url` by ID.
 
+## Phase 15 — Progress Event Self-Containment (2026-04-02)
+### Include Project ID
+- `JobProgressEvent` now includes `project_id`, and export progress payloads include it for easier client-side correlation.
+
 ## Phase 6 — C++ Engine Integration (Pybind11 Bridge)
 - Configured **Pybind11** via `CMake` to compile the C++ `engine` and `bindings` modules into a native Python extension
 - Implemented `app/core/bridge.py` featuring the `TimelineBuilder` utility to map Pydantic `TimelineIR` models directly to C++ memory structures
