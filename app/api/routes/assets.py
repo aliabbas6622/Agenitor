@@ -149,3 +149,31 @@ async def list_assets(project_id: UUID, session: DbSession):
         for a in assets
     ]
 
+
+@router.get("/{asset_id}", response_model=AssetResponse)
+async def get_asset(asset_id: UUID, session: DbSession):
+    """Fetch a single asset by ID."""
+    if _USE_IN_MEMORY_ASSETS:
+        asset = _IN_MEMORY_ASSETS.get(str(asset_id))
+        if asset is None:
+            raise HTTPException(status_code=404, detail="Asset not found")
+        return asset
+
+    mod = importlib.import_module("app.repositories.asset_repository")
+    AssetRepository = getattr(mod, "AssetRepository")
+    repo = AssetRepository(session)
+    asset = await repo.get_by_id(asset_id)
+    if asset is None:
+        raise HTTPException(status_code=404, detail="Asset not found")
+
+    return AssetResponse(
+        id=asset.id,
+        filename=asset.filename,
+        content_type=asset.content_type,
+        file_path=asset.file_path,
+        download_url=_download_url_for_path(Path(asset.file_path)),
+        file_size_bytes=asset.file_size_bytes,
+        duration_seconds=asset.duration_seconds,
+        project_id=asset.project_id,
+    )
+

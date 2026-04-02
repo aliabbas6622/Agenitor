@@ -61,6 +61,10 @@
 - Mounted `GET /uploads/*` for the repository-level `uploads/` directory.
 - `AssetResponse` now includes `download_url` (e.g. `/uploads/<project_id>/<asset_id>_<filename>`) so clients don’t have to use local filesystem paths.
 
+## Phase 14 — Asset Details Endpoint (2026-04-02)
+### Single-Asset Fetch
+- Added `GET /api/v1/assets/{asset_id}` to fetch asset metadata and `download_url` by ID.
+
 ## Phase 6 — C++ Engine Integration (Pybind11 Bridge)
 - Configured **Pybind11** via `CMake` to compile the C++ `engine` and `bindings` modules into a native Python extension
 - Implemented `app/core/bridge.py` featuring the `TimelineBuilder` utility to map Pydantic `TimelineIR` models directly to C++ memory structures
